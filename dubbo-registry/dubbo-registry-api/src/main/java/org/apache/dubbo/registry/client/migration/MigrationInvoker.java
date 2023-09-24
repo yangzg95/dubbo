@@ -234,7 +234,9 @@ public class MigrationInvoker<T> implements MigrationClusterInvoker<T> {
     @Override
     public void migrateToApplicationFirstInvoker(MigrationRule newRule) {
         CountDownLatch latch = new CountDownLatch(0);
+        // 接口级注册
         refreshInterfaceInvoker(latch);
+        // 应用级注册
         refreshServiceDiscoveryInvoker(latch);
 
         // directly calculate preferred invoker, will not wait until address notify
@@ -443,6 +445,7 @@ public class MigrationInvoker<T> implements MigrationClusterInvoker<T> {
             if (invoker != null) {
                 invoker.destroy();
             }
+            // sub-1
             invoker = registryProtocol.getInvoker(cluster, registry, type, url);
         }
         setListener(invoker, () -> {

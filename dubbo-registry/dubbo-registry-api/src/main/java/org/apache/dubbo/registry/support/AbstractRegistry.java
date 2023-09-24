@@ -434,6 +434,7 @@ public abstract class AbstractRegistry implements Registry {
             // We will update our cache file after each notification.
             // When our Registry has a subscribe failure due to network jitter, we can return at least the existing cache URL.
             if (localCacheEnabled) {
+                // sub-6 缓存provider数据，并写入文件
                 saveProperties(url);
             }
         }

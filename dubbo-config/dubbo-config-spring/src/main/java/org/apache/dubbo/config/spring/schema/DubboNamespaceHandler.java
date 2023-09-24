@@ -64,6 +64,8 @@ public class DubboNamespaceHandler extends NamespaceHandlerSupport implements Co
         registerBeanDefinitionParser("provider", new DubboBeanDefinitionParser(ProviderConfig.class));
         registerBeanDefinitionParser("consumer", new DubboBeanDefinitionParser(ConsumerConfig.class));
         registerBeanDefinitionParser("protocol", new DubboBeanDefinitionParser(ProtocolConfig.class));
+
+        // 这里开始有业务的流程
         registerBeanDefinitionParser("service", new DubboBeanDefinitionParser(ServiceBean.class));
         registerBeanDefinitionParser("reference", new DubboBeanDefinitionParser(ReferenceBean.class));
         registerBeanDefinitionParser("annotation", new AnnotationBeanDefinitionParser());

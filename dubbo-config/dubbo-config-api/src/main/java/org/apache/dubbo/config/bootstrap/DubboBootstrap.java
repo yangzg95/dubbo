@@ -1199,6 +1199,7 @@ public final class DubboBootstrap {
 
     private void doStart() {
         // 1. export Dubbo Services
+        // 对应Provider 流程注册
         exportServices();
 
         // If register consumer instance or has exported services
@@ -1209,6 +1210,7 @@ public final class DubboBootstrap {
             registerServiceInstance();
         }
 
+        // 对应 Consumer 消费流程
         referServices();
 
         // wait async export / refer finish if needed

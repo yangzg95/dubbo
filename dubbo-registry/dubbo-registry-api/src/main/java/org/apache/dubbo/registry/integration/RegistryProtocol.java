@@ -210,6 +210,9 @@ public class RegistryProtocol implements Protocol, ScopeModelAware {
             registered));
     }
 
+    /**
+     * 服务注册起点 <dubbo:service ....
+     */
     @Override
     public <T> Exporter<T> export(final Invoker<T> originInvoker) throws RpcException {
         URL registryUrl = getRegistryUrl(originInvoker);
@@ -227,15 +230,18 @@ public class RegistryProtocol implements Protocol, ScopeModelAware {
 
         providerUrl = overrideUrlWithConfig(providerUrl, overrideSubscribeListener);
         //export invoker
+        // 启动 netty 服务
         final ExporterChangeableWrapper<T> exporter = doLocalExport(originInvoker, providerUrl);
 
         // url to registry
+        // 构建注册对象
         final Registry registry = getRegistry(registryUrl);
         final URL registeredProviderUrl = getUrlToRegistry(providerUrl, registryUrl);
 
         // decide if we need to delay publish
         boolean register = providerUrl.getParameter(REGISTER_KEY, true);
         if (register) {
+            // 注册！！！
             register(registry, registeredProviderUrl);
         }
 
@@ -520,6 +526,7 @@ public class RegistryProtocol implements Protocol, ScopeModelAware {
             return invoker;
         }
 
+        // 几种注册方式处理
         for (RegistryProtocolListener listener : listeners) {
             listener.onRefer(this, invoker, consumerUrl, registryURL);
         }
@@ -552,6 +559,7 @@ public class RegistryProtocol implements Protocol, ScopeModelAware {
             registry.register(directory.getRegisteredConsumerUrl());
         }
         directory.buildRouterChain(urlToRegistry);
+        // sub-2
         directory.subscribe(toSubscribeUrl(urlToRegistry));
 
         return (ClusterInvoker<T>) cluster.join(directory);

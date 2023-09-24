@@ -37,11 +37,13 @@ public class MigrationRuleHandler<T> {
     }
 
     public synchronized void doMigrate(MigrationRule rule) {
+
         if (migrationInvoker instanceof ServiceDiscoveryMigrationInvoker) {
             refreshInvoker(MigrationStep.FORCE_APPLICATION, 1.0f, rule);
             return;
         }
 
+        // 默认情况下  APPLICATION_FIRST， 智能匹配 接口/服务级订阅
         // initial step : APPLICATION_FIRST
         MigrationStep step = MigrationStep.APPLICATION_FIRST;
         float threshold = -1f;
@@ -68,7 +70,9 @@ public class MigrationRuleHandler<T> {
         if ((currentStep == null || currentStep != step) || !currentThreshold.equals(threshold)) {
             boolean success = true;
             switch (step) {
+                // 默认 下面2种方式 是他子集
                 case APPLICATION_FIRST:
+                    // org.apache.dubbo.registry.client.migration.MigrationInvoker.migrateToApplicationFirstInvoker
                     migrationInvoker.migrateToApplicationFirstInvoker(newRule);
                     break;
                 case FORCE_APPLICATION:

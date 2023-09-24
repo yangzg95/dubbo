@@ -201,6 +201,7 @@ public class ServiceDiscoveryRegistry implements Registry {
         doSubscribe(url, listener);
     }
 
+    // sub 2-1
     public void doSubscribe(URL url, NotifyListener listener) {
         writableMetadataService.subscribeURL(url);
 

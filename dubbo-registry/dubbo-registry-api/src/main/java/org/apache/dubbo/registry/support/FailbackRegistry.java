@@ -289,11 +289,18 @@ public abstract class FailbackRegistry extends AbstractRegistry {
         }
     }
 
+    /**
+     * sub-3 执行订阅
+     *
+     * @param url      Subscription condition, not allowed to be empty, e.g. consumer://10.20.153.10/org.apache.dubbo.foo.BarService?version=1.0.0&application=kylin
+     * @param listener A listener of the change event, not allowed to be empty
+     */
     @Override
     public void subscribe(URL url, NotifyListener listener) {
         super.subscribe(url, listener);
         removeFailedSubscribed(url, listener);
         try {
+            // sub-4 调具体的实现类
             // Sending a subscription request to the server side
             doSubscribe(url, listener);
         } catch (Exception e) {

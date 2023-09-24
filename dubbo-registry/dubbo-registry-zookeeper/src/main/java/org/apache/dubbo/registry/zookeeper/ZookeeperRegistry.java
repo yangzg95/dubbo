@@ -163,6 +163,7 @@ public class ZookeeperRegistry extends CacheableFailbackRegistry {
                     }
                 }
             } else {
+                // sub-5
                 CountDownLatch latch = new CountDownLatch(1);
                 List<URL> urls = new ArrayList<>();
                 for (String path : toCategoriesPath(url)) {
@@ -171,12 +172,14 @@ public class ZookeeperRegistry extends CacheableFailbackRegistry {
                     if (zkListener instanceof RegistryChildListenerImpl) {
                         ((RegistryChildListenerImpl) zkListener).setLatch(latch);
                     }
+                    // sub-5.5 向zk注册watcher
                     zkClient.create(path, false);
                     List<String> children = zkClient.addChildListener(path, zkListener);
                     if (children != null) {
                         urls.addAll(toUrlsWithEmpty(url, path, children));
                     }
                 }
+                // sub-6
                 notify(url, listener, urls);
                 // tells the listener to run only after the sync notification of main thread finishes.
                 latch.countDown();

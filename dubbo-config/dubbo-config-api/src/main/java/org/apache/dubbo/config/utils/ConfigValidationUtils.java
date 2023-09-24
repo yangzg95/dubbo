@@ -223,6 +223,7 @@ public class ConfigValidationUtils {
                 }
             }
         }
+        // 生成 3.0 注册url
         return genCompatibleRegistries(interfaceConfig.getApplicationModel(), registryList, provider);
     }
 

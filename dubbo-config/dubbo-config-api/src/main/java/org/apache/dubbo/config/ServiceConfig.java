@@ -369,6 +369,11 @@ public class ServiceConfig<T> extends ServiceConfigBase<T> {
         exported();
     }
 
+    /**
+     * <dubbo:service interface="org.apache.dubbo.config.spring.api.HelloService" ref="localHelloService"/>
+     *
+     * ip port hostname application
+     */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void doExportUrls() {
         ServiceRepository repository = getApplicationModel().getApplicationServiceRepository();
@@ -382,6 +387,12 @@ public class ServiceConfig<T> extends ServiceConfigBase<T> {
 
         repository.registerProvider(providerModel);
 
+        /**
+         * 拿到两条注册 URL
+         *
+         * service-discovery-registry://locaxxxxxxx          -- 对应2.7之前的
+         * registry://localhost:2181/org.apachxxxxxxx        -- 对应 3.0之后的
+         */
         List<URL> registryURLs = ConfigValidationUtils.loadRegistries(this, true);
 
         for (ProtocolConfig protocolConfig : protocols) {
@@ -637,6 +648,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T> {
         if (withMetaData) {
             invoker = new DelegateProviderMetaDataInvoker(invoker, this);
         }
+        // 把url组装成这种数据 ， 达到注册起点
         Exporter<?> exporter = protocolSPI.export(invoker);
         exporters.add(exporter);
     }

@@ -265,6 +265,7 @@ public class ReferenceConfig<T> extends ReferenceConfigBase<T> {
 
         serviceMetadata.getAttachments().putAll(referenceParameters);
 
+        // 创建代理
         ref = createProxy(referenceParameters);
 
         serviceMetadata.setTarget(ref);
@@ -378,6 +379,7 @@ public class ReferenceConfig<T> extends ReferenceConfigBase<T> {
                     aggregateUrlFromRegistry(referenceParameters);
                 }
             }
+            //
             createInvokerForRemote();
         }
 
@@ -466,6 +468,7 @@ public class ReferenceConfig<T> extends ReferenceConfigBase<T> {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void createInvokerForRemote() {
         if (urls.size() == 1) {
+            // interfaceClass = com.yang.xx.xx.HelloService
             invoker = protocolSPI.refer(interfaceClass, urls.get(0));
         } else {
             List<Invoker<?>> invokers = new ArrayList<>();
